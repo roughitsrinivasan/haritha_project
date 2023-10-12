@@ -119,8 +119,16 @@ def order():
                 "quantity":random.randint(1,10),
                 "total":random.randint(1,10)*599.99
             }]
-
+        
         insert_order(name,email,phone,address,item)
+        from email_utils import index
+        from datetime import date
+        username=session.get('name')
+        cur_date=date.today()
+        order_id= random.randint(100000,999999)
+        check=index(email,username,cur_date,order_id,address,phone)
+        print(check)
+
         return redirect(url_for('order'))
     return render_template('thankyou.html')
 
