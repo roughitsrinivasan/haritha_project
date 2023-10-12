@@ -1,0 +1,23 @@
+[
+    {
+        "user_id": 1,
+        "name": "Sudhir S",
+        "email": "sudirsha02@gmail.com",
+        "phone": "+919840032533",
+        "address": null,
+        "products": [
+            {
+                "name": "Printed round neck T-shirt",
+                "price": "299.99",
+                "quantity": 2,
+                "total": 599.98
+            },
+            {
+                "name": "Blue White crop top",
+                "price": "599.99",
+                "quantity": 9,
+                "total": 2999.95
+            }
+        ]
+    }
+]
