@@ -17,6 +17,7 @@ def load_orders_from_json():
     except FileNotFoundError:
         # If the file doesn't exist, create an empty JSON file
         save_orders_to_json()
+        return None
 
 # Function to insert a new order
 def insert_order(name, email, phone, address, items):
