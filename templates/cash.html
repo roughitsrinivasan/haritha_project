@@ -126,7 +126,7 @@
     <!--== End Page Title Area ==-->
 
     <!--== Start Contact Area ==-->
-    <section class="contact-area">
+    <section class="contact-area" id="form-area">
       <div class="container">
         <div class="row flex-row-reverse">
           <div class=" col-lg-12 col-md-12">
@@ -162,7 +162,7 @@
                       </div>
                       <div class="col-md-12">
                         <div class="form-group mb-0">
-                          <button class="btn btn-theme btn-black">
+                          <button class="btn btn-theme btn-black" id="submit-btn">
                             Place the Order
                           </button> 
                         </div>
@@ -172,6 +172,11 @@
                 </div>
               </form>
             </div>
+            <script type="text/javascript"> 
+                document.getElementById('contact-form').onsubmit=function(){
+                  document.getElementById('contact-form').style.display='none';
+                }
+            </script>
             <!-- Message Notification -->
             <div class="form-message"></div>
           </div>

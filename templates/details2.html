@@ -148,17 +148,19 @@
 					</div>
 					</div>
 				</div>
-				<form class="inline-block icon-addcart" action="/cart" method="post">
-					<input type="hidden" name="count" id="items" value="">
+				<form class="inline-block icon-addcart" id="form" action="/cart" method="post">
 					<script type="text/javascript">
-						document.getElementById('counter').addEventListener('change', function () {
-							document.getElementById('items').value = this.value;
-						});
+						document.getElementById('form').onsubmit = function() {
+							var items = document.getElementById('counter').value;
+							document.getElementById('items').value = items;
+							this.submit();
+						};
 					</script>
+					<input type="hidden" name="count" id="items" value="">
 					<input type="hidden" name="prod-price" value="Rs.559">
-					<input type="hidden" name="prod-name" value="Disney Donald Duck Printed Crop T-shirt">  				
-					
-  					<button type="submit" name="add" class="enj-add-to-cart-btn btn-default menu-font uppercase">add to cart</button>
+					<input type="hidden" name="prod-name" value="Disney Donald Duck Printed Crop T-shirt">  
+					<input type="hidden" name="prod-id" value="2">				
+  					<button type="submit" class="enj-add-to-cart-btn btn-default menu-font uppercase">add to cart</button>
   				</form>
   				<a href="#" class="icon-heart"><i class="ti-heart"></i></a>
   				

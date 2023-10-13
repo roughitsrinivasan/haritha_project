@@ -41,7 +41,7 @@ def login():
 @app.route('/home')
 def home():
     if not session.get("name"):
-        return "Not a valid user"
+        return redirect(url_for('login'))
     return render_template('home.html')
 
 @app.route('/details1')
@@ -77,24 +77,31 @@ def details4():
 def cart():
     if not session.get("name"):
         return "Not a valid user"
-    if request.method=='post':
-        count= request.form.get('count')
-        price=request.form.get('prod-price')
-        name=request.form.get('prod-name')
-        print(request.form.to_dict())
-        total_price=int(count)*int(price)      
-        session['cart']={"name":name,"count":count,"price":price,"total_price":total_price}
-        print(session['cart'])
-    return render_template('cart.html')
+    if request.method=='GET':
+        return render_template('cart.html',cart=session['purchased'])
+    
+    print('hello world')
+    print('request_dict',request.form.to_dict())
+    count= request.form.get('count')
+    price=request.form.get('prod-price').replace('Rs.','')
+    name=request.form.get('prod-name')
+    product_id=request.form.get('prod-id')
+    print('redirect from details ',request.form.to_dict())
+    total_price=int(count)*int(price)      
+    session['cart']={"name":name,"count":count,"price":price,"total_price":total_price,"product_id":product_id}
+    print(session['cart'])
+    session['purchased'].append(session['cart'])
+    session['cart']={}
+    return render_template('cart.html',cart=session['purchased'])
+
 
 @app.route('/checkout')
 def checkout():
     if not session.get("name"):
         return "Not a valid user"
-    print(session.get('cart'))
+    print(session.get('cart'),session.get('purchased'))
     if session.get('purchased',None)==None:
         session['purchased']=[]
-    session["purchased"].append(session['cart'])
     return render_template('cash.html')
 
 @app.route('/order',methods=['POST','GET'])
@@ -102,23 +109,33 @@ def order():
     if not session.get("name"):
         return "Not a valid user"
     if request.method=='POST':
+
         name=request.form.get('con_name')
         email=request.form.get('con_email')
         phone=request.form.get('con_phone')
         address=request.form.get('con_address') 
         import random
-        item=[{
-                "name":"Printed round neck T-shirt",
-                "price":"299.99",
-                "quantity":random.randint(1,10),
-                "total":random.randint(1,10)*299.99
-            },
-            {
-                "name":"Blue White crop top",
-                "price":"599.99",
-                "quantity":random.randint(1,10),
-                "total":random.randint(1,10)*599.99
-            }]
+        # item=[{
+        #         "name":"Printed round neck T-shirt",
+        #         "price":"299.99",
+        #         "quantity":random.randint(1,10),
+        #         "total":random.randint(1,10)*299.99
+        #     },
+        #     {
+        #         "name":"Blue White crop top",
+        #         "price":"599.99",
+        #         "quantity":random.randint(1,10),
+        #         "total":random.randint(1,10)*599.99
+        #     }]
+        item=[]
+       
+        for i in session['purchased']:
+            item.append({
+                "name":i["name"],
+                "price":i["price"],
+                "quantity":i["count"],
+                "total":i["total_price"]
+            })
         
         insert_order(name,email,phone,address,item)
         from email_utils import index
@@ -128,7 +145,8 @@ def order():
         order_id= random.randint(100000,999999)
         check=index(email,username,cur_date,order_id,address,phone)
         print(check)
-
+        session['purchased']=[]
+        session['cart']={}
         return redirect(url_for('order'))
     return render_template('thankyou.html')
 
