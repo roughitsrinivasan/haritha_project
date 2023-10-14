@@ -80,15 +80,15 @@ def cart():
     if request.method=='GET':
         return render_template('cart.html',cart=session['purchased'])
     
-    print('hello world')
-    print('request_dict',request.form.to_dict())
     count= request.form.get('count')
     price=request.form.get('prod-price').replace('Rs.','')
     name=request.form.get('prod-name')
     product_id=request.form.get('prod-id')
     print('redirect from details ',request.form.to_dict())
     total_price=int(count)*int(price)      
-    session['cart']={"name":name,"count":count,"price":price,"total_price":total_price,"product_id":product_id}
+    import uuid
+    id=uuid.uuid1() 
+    session['cart']={"name":name,"count":int(count),"price":float(price),"total_price":float(total_price),"product_id":product_id,"id":str(id)}
     print(session['cart'])
     session['purchased'].append(session['cart'])
     session['cart']={}
@@ -115,18 +115,6 @@ def order():
         phone=request.form.get('con_phone')
         address=request.form.get('con_address') 
         import random
-        # item=[{
-        #         "name":"Printed round neck T-shirt",
-        #         "price":"299.99",
-        #         "quantity":random.randint(1,10),
-        #         "total":random.randint(1,10)*299.99
-        #     },
-        #     {
-        #         "name":"Blue White crop top",
-        #         "price":"599.99",
-        #         "quantity":random.randint(1,10),
-        #         "total":random.randint(1,10)*599.99
-        #     }]
         item=[]
        
         for i in session['purchased']:
@@ -134,7 +122,8 @@ def order():
                 "name":i["name"],
                 "price":i["price"],
                 "quantity":i["count"],
-                "total":i["total_price"]
+                "total":i["total_price"],
+                "address":address
             })
         
         insert_order(name,email,phone,address,item)
@@ -164,6 +153,34 @@ def orders():
     else:
         return redirect(url_for('login'))
     
+
+@app.route('/edit-order',methods=['POST','GET'])
+def edit():
+    print(session.get('purchased'))
+    print(request.args.get('id'),request.args.get('count'))
+    id=request.args.get('id')
+    operation=request.args.get('op')
+    if operation=='rem':
+        for i in session['purchased']:
+            if i['id']==id:
+                session['purchased'].remove(i)
+        return redirect(url_for('cart'))
+    for i in session['purchased']:
+        if i['id']==id:
+            if operation=='plus':
+                i['count']=int(i['count'])+1
+            else:
+                i['count']=int(i['count'])-1
+            count=i['count']
+            i['total_price']=int(count)*i['price']
+    return redirect(url_for('cart'))
+
+
+@app.route('/clear-cart',methods=['GET'])
+def clearCart():
+    session['purchased']=[]  
+    return redirect(url_for('cart'))
+
 @app.route('/logout',methods=['POST','GET'])
 def logout():
     if not session.get("name"):

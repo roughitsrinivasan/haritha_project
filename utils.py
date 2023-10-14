@@ -1,10 +1,10 @@
 import json
 
 # Create an empty list to store orders
-orders = []
+
 
 # Function to save the orders to a JSON file
-def save_orders_to_json():
+def save_orders_to_json(orders):
     with open("orders.json", "w") as json_file:
         json.dump(orders, json_file)
 
@@ -15,12 +15,12 @@ def load_orders_from_json():
             orders = json.load(json_file)
             return orders
     except FileNotFoundError:
-        # If the file doesn't exist, create an empty JSON file
-        save_orders_to_json()
+        # If the file doesn't exist, create an empty JSON fil
         return None
 
 # Function to insert a new order
 def insert_order(name, email, phone, address, items):
+    orders=load_orders_from_json()
     order = {
         "user_id": len(orders) + 1,
         "name": name,
@@ -29,11 +29,13 @@ def insert_order(name, email, phone, address, items):
         "address": address,
         "products": items
     }
+    
     orders.append(order)
-    save_orders_to_json()
+    save_orders_to_json(orders)
 
 # Function to fetch an order by user_id
 def fetch_order_by_user_name(user_name):
+    orders = load_orders_from_json()
     for order in orders:
         if order["name"] == user_name:
             return order

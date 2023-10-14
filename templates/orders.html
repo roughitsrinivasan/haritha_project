@@ -3,7 +3,7 @@
 <head>
     <title>Order Details</title>
 </head>
-<body>
+<body align="center">
     <h1>Order Details</h1>
     {% for order in orders %}
     <div class="order">
@@ -13,16 +13,25 @@
         <p><strong>Phone:</strong> {{ order.phone }}</p>
         <p><strong>Address:</strong> {{ order.address or 'N/A' }}</p>
         <h2>Items:</h2>
-        <ul>
-            {% for item in order.products %}
-            <li>
-                <p><strong>Item Name:</strong> {{ item.name }}</p>
-                <p><strong>Item Price:</strong> ${{ item.price }}</p>
-                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-                <p><strong>Total:</strong> ${{ item.total }}</p>
-            </li>
-            {% endfor %}
-        </ul>
+        <table  border="" align="center">
+            <thead>
+                <td>Name</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Total</td>
+            </thead>
+            <tbody>
+                {% for item in order.products %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>Rs.{{ item.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
     {% endfor %}
 </body>

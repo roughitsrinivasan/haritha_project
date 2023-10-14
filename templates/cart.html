@@ -8,7 +8,7 @@
     <title>Classic Threads</title>
 
     <!--== Favicon ==-->
-    <link rel="shortcut icon" href="https://template.hasthemes.com/olivine/olivine/assets/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="static/home_files/logo.png" type="image/x-icon">
 
     <!--== Google Fonts ==-->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -142,20 +142,26 @@
                           </div>
                         </div>
                       </td>
-                      <td class="pro-price text-center"><span>{{price}}</span></td>
+                      <td class="pro-price text-center"><span>Rs.{{item.price}}</span></td>
                       <td class="pro-quantity text-center">
                         <div class="quick-product-action">
-                          <div class="pro-qty2">
-                            <input type="text" id="quantity" title="Quantity" value="{{item.count}}">
-                          <a href="#" class="dec qty-btn">(-)</a><a href="#" class="inc qty-btn">(+)</a></div>
+                          <!-- <div class="pro-qty2"> -->
+                            <style>
+                              a{
+                                padding: 0 5px ;
+                              }
+                            </style>
+                            <a href="/edit-order?id={{item.id}}&op=minus">(-)</a>
+                            <input type="text" style="max-width: 30px;text-align: center;border: none;margin: none;outline: none;" id="quantity" title="Quantity" value="{{item.count}}">
+                            <a href="/edit-order?id={{item.id}}&op=plus" >(+)</a>
+                          <!-- </div> -->
                         </div>
                       </td>
-                      <td class="pro-subtotal text-center"><span>Rs.299.00</span></td>
-                      <td class="pro-remove text-center"><a href="#">×</a></td>
+                      <td class="pro-subtotal text-center"><span>Rs.{{item.price*item.count}}</span></td>
+                      <td class="pro-remove text-center"><a href="/edit-order?id={{item.id}}&op=rem">×</a></td>
                     </tr>
                     {% endfor %}
                     {% endif %}
-
 
 
                   </tbody>
@@ -166,7 +172,7 @@
                   <div class="cart-buttons">
                     <a class="btn-shopping update-cart ml-0" href="/checkout">Checkout</a>
                     <a class="btn-shopping continue-shopping" href="/home">Continue Shopping</a>
-                    <a class="btn-shopping" href="#">Clear Cart</a>
+                    <a class="btn-shopping" href="/clear-cart">Clear Cart</a>
                   </div>
                 </div>
               </div>
@@ -194,9 +200,8 @@
               </div>
               
              
-              <h5>Follows Us</h5>
-
-              <br><br>
+              
+              
               <div class="widget-menu-wrap">
               
               </div>
@@ -211,7 +216,7 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="widget-copyright text-center">
-                <p>© 2023 <span>Classic Threads</span>. Made with by <a target="_blank" href="#">Classic Threads Developers</a></p>
+                <p>© 2023 <span>Classic Threads</span>. Made with by <a target="_blank" href="/home">Classic Threads Developers</a></p>
               </div>
             </div>
             <div class="col-md-6">
